@@ -3,7 +3,7 @@ language: python
 python: "2.7"
 
 # Use the new container infrastructure
-sudo: true
+sudo: false
 
 # Install ansible
 addons:
@@ -24,9 +24,6 @@ install:
 script:
   # Basic role syntax check
   - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
-  # Check if kibana service comes up and binds to port 5601
-  - ansible-playbook tests/test.yml -i tests/inventory
-  - netstat -atpn | grep 5601
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
