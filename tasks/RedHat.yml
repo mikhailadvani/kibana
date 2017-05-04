@@ -1,0 +1,38 @@
+- name: Add kibana repo
+  yum_repository:
+    name: kibana
+    description: Kibana repository for 4.4.x packages
+    baseurl: http://packages.elastic.co/kibana/4.4/centos
+    gpgkey: http://packages.elastic.co/GPG-KEY-elasticsearch
+    gpgcheck: yes
+    enabled: yes
+  become: yes
+
+- name: Install kibana package
+  yum:
+    name: kibana
+    state: present
+  become: yes
+
+- name: Allow kibana to serve requests only from localhost
+  lineinfile:
+    dest: /opt/kibana/config/kibana.yml
+    regexp: '(.*)server.host(.*)'
+    line: 'server.host: 127.0.0.1'
+  become: yes
+  notify: restart kibana
+
+- name: Configure elasticsearch URL
+  lineinfile:
+    dest: /opt/kibana/config/kibana.yml
+    regexp: '(.*)elasticsearch.url(.*)'
+    line: 'elasticsearch.url: "{{elasticsearch.url}}"'
+  become: yes
+  notify: restart kibana
+
+- name: Start kibana service
+  service:
+    name: kibana
+    state: started
+    enabled: yes
+  become: yes

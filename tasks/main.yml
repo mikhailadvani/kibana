@@ -1,0 +1,5 @@
+---
+# tasks file for kibana
+
+- name: "Setup kibana for {{ansible_os_family}}"
+  include: "{{ansible_os_family}}.yml"
